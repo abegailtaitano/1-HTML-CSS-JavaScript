@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Color Guessing Game</title>
+    </head>
+    <body>
+        <h1>Color Guessing Game</h1>
+    <!--This button type lets the user run the game after they click on Start Game-->
+        <button type="button" onclick="runGame()">Start Game</button> 
+        <script>
+            const COLORS_ARRAY = ['blue', 'cyan', 'gold', 'gray', 'green', 'magenta', 'orange', 'red', 'white', 'yellow'];
+
+    //This function runs the game with declaration of let and const variables
+        function runGame() {
+            let guessColor = ''; //Initializes the value of an empty string
+            let correct = false; // Initializes to the boolean value of false
+            let numTries = 0; //Initializes numTries to 0
+
+    //generates a random number that is between 0 and the last index number of the COLOR_ARRAY array
+            const targetIndex = Math.floor(Math.random() * (COLORS_ARRAY.length -0)) + 0;
+            const target = COLORS_ARRAY [targetIndex];
+            console.log('The correct answer is' + target);
+
+    // code below is a do..while loop, also included an array.join() method to join the colors and add a space between them
+            do {guessColor = prompt('I am thinking of one of these colors:\n\n' + COLORS_ARRAY.join(', ') + '\n\nWhat color am I thinking of?');
+    // This is what happens if the user hits cancel it returns the appropriate message and exits the game
+            if (guessColor === null) {
+               alert('The game has been aborted.'); return;
+            }
+                numTries += 1; //This code uses the addition assignment operator, it determines how many tries the user guessed
+                correct = checkGuess(guessColor, target);
+            } while (!correct); //while loop will end once the condition is true
+
+            alert('Congratulations! You have guessed the color!\n\nIt took you' + ' ' +  numTries  + ' ' +  'guesses to finish the game!\n\n Hit OK to see the color in the background');
+    //This is what happens if the user guesses the correct color and hits OK the background will change to the chosen color
+            document.body.style.background = guessColor;
+        }
+
+    //This function checks the users guess 
+        function checkGuess(guessColor, target) {
+            let correct = false;
+    //The codes below creates if..else statements to judge multiple color input values and returns the appropriate messages to the user
+            if (COLORS_ARRAY.includes(guessColor)===false) { //if the user inputs a variable that isn't a color or inputs a color not in the COlORS_ARRAY
+                alert('Sorry, I dont recognize your color.\n\nPlease try again.');
+            }else if(guessColor > target) { //if users guess is higher than target
+                alert('Sorry, your guess is incorrect.\n\nHint: your color is alphabetically higher than mine.\n\nPlease try again.');
+            }else if(guessColor < target) { //if users guess is lower than target
+                alert('Sorry, your guess is incorrect.\n\nHint: your color is alphabetically lower than mine.\n\nPlease try again.');
+            }else {
+                correct = true; 
+            }
+          return correct; //variable that contains the value true if the guess was correct, and false if not
+        }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Matching Game</title>
+    <!--<style> element below is an internal CSS -->
+        <style>
+           img {
+               position:absolute;
+           } 
+           div {
+               position:absolute;
+               width: 500px;
+               height: 500px;
+           }
+           #rightSide {
+               left: 500px;
+               border-left: 2px solid rgb(173, 40, 40);
+           }
+           h1 {
+               color:yellow;
+               font-size:50px;
+           }
+           body {
+                background-color: black;  
+           }
+           p {
+               color: rgb(173, 40, 40);
+               font-size:20px;
+           }
+           #restart {
+               color:yellow;
+               background-color: black;
+           }
+        </style>
+    </head>
+    <body onload="generateFaces()"> <!--This is an inline onload event handler to the body element this calls the generateFaces function once webpage is loaded-->
+        <h1>Matching Game</h1>
+        <p>Click on the extra smiling face on the left.</p> <!--Instructions for the user to start the game-->
+        <input type="button" id="restart" value="Restart Game" onclick="restartGame()"> 
+        <div id="leftSide"></div> <!--contains all the smiley faces shown on the left side-->
+        <div id="rightSide"></div> <!--contains all the smiley faces shown on the right side-->
+
+    <!--Below this JavaScript begins-->
+        <script>
+            let numberOfFaces = 5; //Once we run the for loop, this means it should iterate 5 times, causing 5 smiley faces to appear at random locations on the left side
+            const theLeftSide = document.getElementById('leftSide'); // declares Id that points to the left side
+            const theRightSide = document.getElementById('rightSide'); //declares Id that points to the right side
+
+    //Below this is the first function using a for loop
+         function generateFaces() {
+             //begin for loop
+                for (let i = 0; i < numberOfFaces; i++) {
+                     let face = document.createElement('img'); //face is the value of the newly created img node
+                     face.src= 'images/smile.png'; //this is the image source
+                     //codes below is what controls the top and left style properties using the Math.floor and Math.random to generate random numbers between 1-400
+                     randomTop = Math.floor(Math.random()* 400 + 1); 
+                     randomLeft = Math.floor(Math.random()* 400 + 1);
+         
+                    face.style.top = randomTop + 'px'; 
+                    face.style.left = randomLeft + 'px';
+                    theLeftSide.appendChild(face); //this creates the face image element node as a child of theLeftSide
+                }
+             //end of for loop
+            const leftSideImages = theLeftSide.cloneNode(true); //declares the variable leftSideImages and clones the entire theLeftSide div node including all its children
+            leftSideImages.removeChild(leftSideImages.lastChild); //this code will ensure that there is one less smiley face on the right side
+            theRightSide.appendChild(leftSideImages); //appends leftSideImages as a child of theRightSide
+
+            theLeftSide.lastChild.addEventListener('click', nextLevel); //we added an event listener when click is initiated it go to the next level
+            document.body.addEventListener('click', gameOver);
+        }
+        //end of first function generateFaces()
+
+    //Begining of second function using while loops
+        function nextLevel () {
+            event.stopPropagation(); //this code ensures that the event does not get applied to other elements in web page
+            numberOfFaces += 5; //increases the number stored in numberOfFaces by 5, so for the next time 5 more faces are generated than the time before on both sides
+        
+            /*The next few codes below initiates 
+            when the user clicks on the correct face
+            all faces are removed before a new set of faces
+            is generated and added to the page.
+            So by using these while loops below 
+            are to remove all child nodes 
+            of the theLeftSide and theRightSide*/
+
+                while (theLeftSide.firstChild) {
+                    theLeftSide.removeChild(theLeftSide.firstChild);
+                }
+                while (theRightSide.firstChild) {
+                    theRightSide.removeChild(theRightSide.firstChild);
+                }
+
+            generateFaces(); //means a new set of faces is generated because of the increase in value of numberOfFaces, there will be 5 more faces than before on both sides
+        }
+        //end of second function
+
+    //Begining of a third function that handles the situation when the user clicks on anything other than the correct face
+        function gameOver() {
+            alert('Game Over!'+ '\n\nClick the restart game button to restart the game!'); //user will see this alert message when the game is over and prompt on how to restart game
+            document.body.removeEventListener('click', gameOver);
+            theRightSide.lastChild.removeEventListener('click', nextLevel);
+        } 
+
+    //Code below declares the function restartGame to start the game over, starting with the initial number of 5 faces 
+        restart.onclick = function restartGame() {
+            event.stopPropagation();
+            location.reload(true);
+        };
+        </script>
+    </body>
+</html>
